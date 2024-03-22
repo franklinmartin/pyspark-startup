@@ -21,8 +21,8 @@ df = spark.createDataFrame([
 ])
 df
 
-df.show()
-df.printSchema()
+#df.show()
+#df.printSchema()
 
 df = spark.createDataFrame([
     (1, 2., 'string1', date(2000, 1, 1), datetime(2000, 1, 1, 12, 0)),
@@ -31,8 +31,8 @@ df = spark.createDataFrame([
 ], schema='a long, b double, c string, d date, e timestamp')
 df
 
-df.show()
-df.printSchema()
+#df.show()
+#df.printSchema()
 
 pandas_df = pd.DataFrame({
     'a': [1, 2, 3],
@@ -44,8 +44,8 @@ pandas_df = pd.DataFrame({
 df = spark.createDataFrame(pandas_df)
 df
 
-df.show()
-df.printSchema()
+#df.show()
+#df.printSchema()
 
 rdd = spark.sparkContext.parallelize([
     (1, 2., 'string1', date(2000, 1, 1), datetime(2000, 1, 1, 12, 0)),
@@ -55,5 +55,30 @@ rdd = spark.sparkContext.parallelize([
 df = spark.createDataFrame(rdd, schema=['a', 'b', 'c', 'd', 'e'])
 df
 
+#df.show()
+#df.printSchema()
+
+#spark.conf.set('spark.sql.repl.eagerEval.enabled', True)
+#df
+
 df.show()
 df.printSchema()
+
+df.show(1)
+df.show(1, vertical=True)
+df.columns
+
+#cool summary.
+#count mean stddev min max
+df.select("a", "b", "c").describe().show()
+
+#Thrown out of memory when too large driver side
+#collects from executors to driver side
+#collects distributed data to the driver side as the local data
+df.collect()
+#In order to avoid throwing an out-of-memory exception, use DataFrame.take() or DataFrame.tail().
+df.take(1)
+df.tail(1)
+
+df.toPandas()
+df.a
